@@ -75,16 +75,25 @@
 	[ticket release];
 }
 
-- (void)fetchDataWithRequest:(OAMutableURLRequest *)aRequest delegate:(id)aDelegate didFinishSelector:(SEL)finishSelector didFailSelector:(SEL)failSelector {
+- (void)fetchDataWithRequest:(OAMutableURLRequest *)aRequest delegate:(id)aDelegate didFinishSelector:(SEL)finishSelector didFailSelector:(SEL)failSelector didProgressSelector:(SEL)progressSelector {
 	[request release];
 	request = [aRequest retain];
     delegate = aDelegate;
     didFinishSelector = finishSelector;
     didFailSelector = failSelector;
+    didProgressSelector = progressSelector;
     
     [request prepare];
 
 	connection = [[NSURLConnection alloc] initWithRequest:aRequest delegate:self];
+}
+
+- (void)fetchDataWithRequest:(OAMutableURLRequest *)aRequest delegate:(id)aDelegate didFinishSelector:(SEL)finishSelector didFailSelector:(SEL)failSelector {
+    [self fetchDataWithRequest:aRequest
+                      delegate:aDelegate
+             didFinishSelector:finishSelector
+               didFailSelector:failSelector
+           didProgressSelector:nil];
 }
 
 @end

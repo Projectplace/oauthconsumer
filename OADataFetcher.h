@@ -37,8 +37,11 @@
     id delegate;
     SEL didFinishSelector;
     SEL didFailSelector;
+    SEL didProgressSelector;
 }
 
 - (void)fetchDataWithRequest:(OAMutableURLRequest *)aRequest delegate:(id)aDelegate didFinishSelector:(SEL)finishSelector didFailSelector:(SEL)failSelector;
+
+- (void)fetchDataWithRequest:(OAMutableURLRequest *)aRequest delegate:(id)aDelegate didFinishSelector:(SEL)finishSelector didFailSelector:(SEL)failSelector didProgressSelector:(SEL)progressSelector;
 
 @end
