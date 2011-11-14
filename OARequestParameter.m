@@ -28,14 +28,19 @@
 
 
 @implementation OARequestParameter
-@synthesize name, value;
+@synthesize name, value, encoding;
 
-- (id)initWithName:(NSString *)aName value:(NSString *)aValue {
+- (id)initWithName:(NSString *)aName value:(NSString *)aValue encoding:(CFStringEncoding)anEncoding {
     if ((self = [super init])) {
 		self.name = aName;
 		self.value = aValue;
+        self.encoding = encoding;
 	}
     return self;
+}
+
+- (id)initWithName:(NSString *)aName value:(NSString *)aValue {
+    return [self initWithName:aName value:aValue encoding:kCFStringEncodingUTF8];
 }
 
 - (void)dealloc
@@ -72,9 +77,14 @@
 }
 
 
++ (id)requestParameter:(NSString *)aName value:(NSString *)aValue encoding:(CFStringEncoding)anEncoding
+{
+	return [[[self alloc] initWithName:aName value:aValue encoding:anEncoding] autorelease];
+}
+
 + (id)requestParameter:(NSString *)aName value:(NSString *)aValue
 {
-	return [[[self alloc] initWithName:aName value:aValue] autorelease];
+    return [self requestParameter:aName value:aValue encoding:kCFStringEncodingUTF8];
 }
 
 @end

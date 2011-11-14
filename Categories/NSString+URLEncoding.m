@@ -28,32 +28,44 @@
 
 @implementation NSString (OAURLEncodingAdditions)
 
-- (NSString *)encodedURLString {
+- (NSString *)encodedURLStringWithEncoding:(CFStringEncoding)encoding {
 	NSString *result = (NSString *)CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault,
                                                                            (CFStringRef)self,
                                                                            NULL,                   // characters to leave unescaped (NULL = all escaped sequences are replaced)
                                                                            CFSTR("?=&+"),          // legal URL characters to be escaped (NULL = all legal characters are replaced)
-                                                                           kCFStringEncodingUTF8); // encoding
+                                                                           encoding); // encoding
 	return [result autorelease];
 }
 
-- (NSString *)encodedURLParameterString {
+- (NSString *)encodedURLString {
+    return [self encodedURLStringWithEncoding:kCFStringEncodingUTF8];
+}
+
+- (NSString *)encodedURLParameterStringWithEncoding:(CFStringEncoding)encoding {
     NSString *result = (NSString *)CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault,
                                                                            (CFStringRef)self,
                                                                            NULL,
                                                                            CFSTR(":/=,!$&'()*+;[]@#?"),
-                                                                           kCFStringEncodingUTF8);
+                                                                           encoding);
 	return [result autorelease];
 }
 
-- (NSString *)decodedURLString {
+- (NSString *)encodedURLParameterString {
+    return [self encodedURLParameterStringWithEncoding:kCFStringEncodingUTF8];
+}
+
+- (NSString *)decodedURLStringWithEncoding:(CFStringEncoding)encoding {
 	NSString *result = (NSString*)CFURLCreateStringByReplacingPercentEscapesUsingEncoding(kCFAllocatorDefault,
 																						  (CFStringRef)self,
 																						  CFSTR(""),
-																						  kCFStringEncodingUTF8);
+																						  encoding);
 	
 	return [result autorelease];
 	
+}
+
+- (NSString *)decodedURLString {
+    return [self decodedURLStringWithEncoding:kCFStringEncodingUTF8];
 }
 
 -(NSString *)removeQuotes

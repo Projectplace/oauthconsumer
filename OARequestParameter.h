@@ -32,10 +32,13 @@
 @protected
     NSString *name;
     NSString *value;
+    CFStringEncoding encoding;
 }
 @property(copy, readwrite) NSString *name;
 @property(copy, readwrite) NSString *value;
+@property(nonatomic, assign) CFStringEncoding encoding;
 
+- (id)initWithName:(NSString *)aName value:(NSString *)aValue encoding:(CFStringEncoding)anEncoding;
 - (id)initWithName:(NSString *)aName value:(NSString *)aValue;
 - (NSString *)URLEncodedName;
 - (NSString *)URLEncodedValue;
@@ -43,6 +46,7 @@
 
 - (BOOL)isEqualToRequestParameter:(OARequestParameter *)parameter;
 
++ (id)requestParameter:(NSString *)aName value:(NSString *)aValue encoding:(CFStringEncoding)anEncoding;
 + (id)requestParameter:(NSString *)aName value:(NSString *)aValue;
 
 @end

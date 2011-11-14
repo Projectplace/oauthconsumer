@@ -28,8 +28,11 @@
 
 @interface NSString (OAURLEncodingAdditions)
 
+- (NSString *)encodedURLStringWithEncoding:(CFStringEncoding)encoding;
 - (NSString *)encodedURLString;
+- (NSString *)encodedURLParameterStringWithEncoding:(CFStringEncoding)encoding;
 - (NSString *)encodedURLParameterString;
+- (NSString *)decodedURLStringWithEncoding:(CFStringEncoding)encoding;
 - (NSString *)decodedURLString;
 - (NSString *)removeQuotes;
 @end
