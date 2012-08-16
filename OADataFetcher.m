@@ -71,7 +71,7 @@
 																  data:responseData
 															didSucceed:[(NSHTTPURLResponse *)response statusCode] < 400];
 
-	[delegate performSelector:didFinishSelector withObject:ticket withObject:responseData];
+    [delegate performSelector:didFinishSelector withObject:ticket withObject:responseData];
 	[ticket release];
 }
 
@@ -96,4 +96,29 @@
            didProgressSelector:nil];
 }
 
+- (NSURLRequest *)connection:(NSURLConnection *)aConnection
+             willSendRequest:(NSURLRequest *)aRequest
+            redirectResponse:(NSURLResponse *)aResponse
+{
+    BOOL URLPermanentlyMoved = ([(NSHTTPURLResponse *)aResponse statusCode] == 301);
+    BOOL authorizationRequestSucceeded = [[[aRequest URL] lastPathComponent] isEqualToString:@"ios"];
+    
+    if (URLPermanentlyMoved && authorizationRequestSucceeded) {
+        OAServiceTicket *ticket = [[OAServiceTicket alloc] initWithRequest:request
+                                                                  response:response
+                                                                      data:responseData
+                                                                didSucceed:YES];
+                
+        NSString *verifierToken = [[[[aRequest URL] query] componentsSeparatedByString:@"="] lastObject];
+        
+        [delegate performSelector:didFinishSelector
+                       withObject:ticket
+                       withObject:verifierToken];
+        
+        [ticket release];
+        [aConnection cancel];
+        return nil;
+    }
+    return aRequest;
+}
 @end
